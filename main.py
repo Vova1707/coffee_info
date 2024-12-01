@@ -3,14 +3,16 @@ import sys
 from PyQt6 import uic
 
 from PyQt6.QtWidgets import QApplication
-from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
+from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem
+from Main1 import Ui_MainWindow as Main
+from addEditCoffeeForm import Ui_MainWindow as D
 
 
-class MyWidget(QMainWindow):
+class MyWidget(QMainWindow, Main):
     def __init__(self):
         super().__init__()
-        uic.loadUi('main.ui', self)
-        self.con = sqlite3.connect('coffee.sqlite')
+        self.setupUi(self)
+        self.con = sqlite3.connect('data/coffee.sqlite')
         self.cur = self.con.cursor()
         self.update_result()
         self.save_b.clicked.connect(self.adding)
@@ -46,13 +48,12 @@ class MyWidget(QMainWindow):
         self.update_result()
 
 
-class AddWidget(QMainWindow):
+class AddWidget(QMainWindow, D):
     def __init__(self, parent=None, a=None):
         super().__init__(parent)
-        uic.loadUi('addEditCoffeeForm.ui', self)
+        self.setupUi(self)
         self.cur = parent.con.cursor()
         self.parent = parent
-        print(self.parent.modified.keys())
         if not a:
             self.pushButton.clicked.connect(self.get_adding_verdict)
         else:
